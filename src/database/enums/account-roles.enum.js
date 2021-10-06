@@ -1,0 +1,5 @@
+module.exports = Object.freeze({
+  ADMINISTRATOR: 'ADMINISTRATOR',
+  FARM_MANAGER: 'FARM_MANAGER',
+  FARM_MEMBER: 'FARM_MEMBER',
+});
