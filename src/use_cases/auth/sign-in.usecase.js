@@ -1,5 +1,4 @@
 const { ResourceNotFoundError, BadRequestError } = require('../../application/helpers/errors');
-const { ACCOUNT_ROLES } = require('../../database/enums');
 const { Account, FarmMember, Session } = require('../../database/models');
 const { isFarmAccount } = require('./helpers/account.helper');
 
@@ -23,14 +22,14 @@ module.exports = function buildSignInUseCase(dependencies) {
 
   async function findAccountByEmail(email) {
     const account = await Account.findOne({ email });
-    if (!account) throw new ResourceNotFoundError(JSON.stringify({ email: `Account with email ${email} was not found` }));
+    if (!account) throw new ResourceNotFoundError(JSON.stringify({ email: `Adresse email <${email}> non enregistrée` }));
 
     return account;
   }
 
   async function ensurePasswordIsCorrect(account, password) {
     const correctPassword = await hashUtils.isEqualToHash({ hash: account.password, value: password });
-    if (!correctPassword) throw new BadRequestError(JSON.stringify({ password: `Incorrect password` }));
+    if (!correctPassword) throw new BadRequestError(JSON.stringify({ password: `Mot de passe incorrect` }));
   }
 
   async function createSignInResponse(account) {

@@ -37,6 +37,8 @@ module.exports = class WinstonLogger extends Logger {
   }
 
   info(message) {
+    if (process.env.NODE_ENV === 'test') return;
+
     WinstonLogger.logger.info(message);
   }
 

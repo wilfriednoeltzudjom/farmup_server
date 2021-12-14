@@ -14,6 +14,7 @@ const farmSchema = new Schema(
     phone: { type: String },
     broodingBuildingArea: { type: Number, default: 0 },
     mainBuildingArea: { type: Number, default: 0 },
+    addressText: { type: String },
     address: addressSchema,
     logo: assetSchema,
     settings: { type: Schema.Types.ObjectId, ref: 'Settings' },

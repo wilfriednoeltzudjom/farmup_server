@@ -6,7 +6,7 @@ const { SessionFactory } = require('../../../src/database/factories');
 const { ResourceNotFoundError, BadRequestError } = require('../../../src/application/helpers/errors');
 const { SESSION_STATUSES } = require('../../../src/database/enums');
 
-describe('UseCase - Sign out', () => {
+describe('UseCase - Auth - Sign out', () => {
   it('should fail if there is no existing session related to the provided sessionId', async function () {
     const session = SessionFactory.generateSession({}, { _id: { skip: false } });
 

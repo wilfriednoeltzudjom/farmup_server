@@ -6,7 +6,7 @@ const { SignInFormFactory, AccountFactory, FarmMemberFactory, FarmFactory, Setti
 const { BadRequestError, ResourceNotFoundError } = require('../../../src/application/helpers/errors');
 const { ACCOUNT_ROLES } = require('../../../src/database/enums');
 
-describe('UseCase - Sign in', () => {
+describe('UseCase - Auth - Sign in', () => {
   beforeEach(function () {
     this.signInFormData = SignInFormFactory.generateSignInFormData();
   });
@@ -30,7 +30,7 @@ describe('UseCase - Sign in', () => {
   it('should fail if the provided password is incorrect', async function () {
     await AccountFactory.createAccount({ email: this.signInFormData.email });
 
-    await expect(signInUseCase.execute(this.signInFormData)).to.be.eventually.rejectedWith(BadRequestError, /password/i);
+    await expect(signInUseCase.execute(this.signInFormData)).to.be.eventually.rejectedWith(BadRequestError, /mot de passe/i);
   });
 
   it('should sign in an administrator account', async function () {

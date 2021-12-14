@@ -15,8 +15,8 @@ module.exports = function buildAuthController(dependencies) {
     const response = await signInUseCase.execute(request.body);
 
     return HttpResponse.succeeded({
-      data: response,
       message: authMessages.SIGNED_IN.EN,
+      data: response,
     });
   }
 
@@ -24,8 +24,8 @@ module.exports = function buildAuthController(dependencies) {
     const response = await signUpUseCase.execute({ ...request.query, ...request.body });
 
     return HttpResponse.created({
-      data: response,
       message: authMessages.SIGNED_UP.EN,
+      data: response,
     });
   }
 
@@ -33,8 +33,8 @@ module.exports = function buildAuthController(dependencies) {
     const response = await signOutUseCase.execute(request.user);
 
     return HttpResponse.succeeded({
-      data: response,
       message: authMessages.SIGNED_OUT.EN,
+      data: response,
     });
   }
 

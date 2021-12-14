@@ -7,7 +7,7 @@ function isNotNull(value) {
 }
 
 function isString(value) {
-  return typeof value === 'string';
+  return typeof value === 'string' || value instanceof String;
 }
 
 function isBoolean(value) {
@@ -52,6 +52,16 @@ function isJSONString(value) {
   }
 }
 
+function isDate(value) {
+  return !isNumber(value) && !Number.isNaN(Date.parse(value));
+}
+
+function isEmpty(value) {
+  if (isString(value)) return value.length === 0;
+
+  return false;
+}
+
 module.exports = {
   isNullish,
   isNotNull,
@@ -64,4 +74,6 @@ module.exports = {
   isNotEmptyString,
   isJSONString,
   isNonEmptyObject,
+  isDate,
+  isEmpty,
 };

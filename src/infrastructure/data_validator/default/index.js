@@ -1,4 +1,4 @@
-const { isNotNull, isString, isNumber, isBoolean, isArray, isEnum } = require('../../../application/helpers/types.helper');
+const { isNotNull, isString, isNumber, isBoolean, isArray, isEnum, isDate } = require('../../../application/helpers/types.helper');
 
 const DataValidator = require('../interface');
 
@@ -21,5 +21,9 @@ module.exports = class DefaultDataValidator extends DataValidator {
 
   validateEnum(enumeration, value, errorMessagePrefix) {
     if (isNotNull(value) && !isEnum(enumeration, value)) super.validateArray(value, errorMessagePrefix);
+  }
+
+  validateDate(value, errorMessagePrefix) {
+    if (isNotNull(value) && !isDate(value)) super.validateDate(value, errorMessagePrefix);
   }
 };

@@ -6,7 +6,7 @@ const { AccountFactory, FarmMemberFactory, FarmFactory, SettingsFactory } = requ
 const { ResourceNotFoundError } = require('../../../src/application/helpers/errors');
 const { ACCOUNT_ROLES } = require('../../../src/database/enums');
 
-describe('UseCase - Get profile', () => {
+describe('UseCase - Auth - Get profile', () => {
   it('should fail if there is no existing account related to the provided id', async function () {
     const account = AccountFactory.generateAccount({}, { _id: { skip: false } });
 

@@ -3,14 +3,16 @@ module.exports = class HttpRequest {
   #params;
   #query;
   #file;
+  #files;
   #user;
   #session;
 
-  constructor({ body, params, query, file, user, session }) {
+  constructor({ body, params, query, file, files, user, session }) {
     this.#body = body;
     this.#params = params;
     this.#query = query;
     this.#file = file;
+    this.#files = files;
     this.#user = user;
     this.#session = session;
   }
@@ -37,6 +39,10 @@ module.exports = class HttpRequest {
 
   get session() {
     return this.#session;
+  }
+
+  get files() {
+    return this.#files;
   }
 
   static fromExpress(expressRequest) {

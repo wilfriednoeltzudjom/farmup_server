@@ -1,7 +1,7 @@
 {
   "env": {
     "commonjs": true,
-    "es2021": true,
+    "es2020": true,
     "node": true,
     "mocha": true
   },
@@ -12,6 +12,11 @@
   },
   "plugins": ["prettier"],
   "rules": {
-    "no-unused-vars": ["warn", { "varsIgnorePattern": "[iI]gnored", "args": "none" }]
+    "no-console": "off",
+    "class-methods-use-this": "off",
+    "no-unused-vars": ["warn", { "varsIgnorePattern": "[iI]gnored", "args": "none" }],
+    "no-new": "off",
+    "no-eval": "off",
+    "lines-between-class-members": "off"
   }
 }

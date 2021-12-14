@@ -29,8 +29,8 @@ const customerCategories = {
 };
 
 const observationCategories = {
-  EN: ['Chickens behaviour', 'Litter state'],
-  FR: ['Comportement des sujets', 'État de la litière'],
+  EN: ['Chickens behaviour', 'Litter state', 'Chickens weight'],
+  FR: ['Comportement des sujets', 'État de la litière', 'Poids des sujets'],
 };
 
 const operationCategories = {

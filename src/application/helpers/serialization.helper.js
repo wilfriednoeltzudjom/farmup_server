@@ -1,31 +1,41 @@
 const { dataUtils } = require('../../infrastructure');
 const { isNonEmptyObject } = require('./types.helper');
 
-function serializeResponse(response = {}) {
-  const updatedResponse = removeUnneededPropertiesFromResponse(response);
-  if (doesResponseIncludeNonEmptyObjects(updatedResponse)) {
-    Object.keys(updatedResponse).forEach((property) => {
-      if (isNonEmptyObject(updatedResponse[property])) {
-        updatedResponse[property] = serializeResponse(updatedResponse[property]);
+function serializeResponse(response) {
+  if (Array.isArray(response)) return serializeArray(response);
+
+  return serializeObject(response);
+}
+
+function serializeArray(array = []) {
+  return array.map(serializeObject);
+}
+
+function serializeObject(object = {}) {
+  const serializedObject = removeUnneededProperties(object);
+  if (doesObjectIncludeNonEmptyObjects(serializedObject)) {
+    Object.keys(serializedObject).forEach((property) => {
+      if (isNonEmptyObject(serializedObject[property])) {
+        serializedObject[property] = serializeObject(serializedObject[property]);
       }
     });
   }
 
-  return updatedResponse;
+  return serializedObject;
 }
 
-function removeUnneededPropertiesFromResponse(response) {
-  const clonedResponse = dataUtils.cloneDeep(JSON.parse(JSON.stringify(response)));
-  delete clonedResponse._id;
-  delete clonedResponse.password;
-  delete clonedResponse.__v;
-  delete clonedResponse.searchableStrings;
+function removeUnneededProperties(object) {
+  const clone = dataUtils.cloneDeep(JSON.parse(JSON.stringify(object)));
+  delete clone._id;
+  delete clone.password;
+  delete clone.__v;
+  delete clone.searchableStrings;
 
-  return clonedResponse;
+  return clone;
 }
 
-function doesResponseIncludeNonEmptyObjects(response) {
-  return Object.keys(response).some((property) => isNonEmptyObject(response[property]));
+function doesObjectIncludeNonEmptyObjects(object) {
+  return Object.keys(object).some((property) => isNonEmptyObject(object[property]));
 }
 
 module.exports = { serializeResponse };

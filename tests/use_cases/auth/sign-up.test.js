@@ -5,7 +5,7 @@ const signUpUseCase = require('../../../src/use_cases/auth/sign-up.usecase')(dep
 const { SignUpFormFactory, AccountFactory, FarmMemberFactory, FarmFactory, SettingsFactory } = require('../../../src/database/factories');
 const { BadRequestError } = require('../../../src/application/helpers/errors');
 
-describe('UseCase - Sign up', function () {
+describe('UseCase - Auth - Sign up', function () {
   beforeEach(function () {
     this.signUpFormData = SignUpFormFactory.generateSignUpFormData();
   });
@@ -61,7 +61,7 @@ describe('UseCase - Sign up', function () {
   it('should fail if there is already a farm member related to the provided phone', async function () {
     await FarmMemberFactory.createFarmMember({ phone: this.signUpFormData.phone });
 
-    await expect(signUpUseCase.execute(this.signUpFormData)).to.be.eventually.rejectedWith(BadRequestError, /phone/i);
+    await expect(signUpUseCase.execute(this.signUpFormData)).to.be.eventually.rejectedWith(BadRequestError, /téléphone/i);
   });
 
   it('should succeed an sign in the newly registred account', async function () {

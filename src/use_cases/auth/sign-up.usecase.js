@@ -45,12 +45,12 @@ module.exports = function buildSignUpUseCase(dependencies) {
 
   async function ensureEmailIsAvailable({ email }) {
     const matchingAccountsCount = await Account.countDocuments({ email });
-    if (matchingAccountsCount > 0) throw new BadRequestError(JSON.stringify({ email: `Email ${email} already taken` }));
+    if (matchingAccountsCount > 0) throw new BadRequestError(JSON.stringify({ email: `Adresse email <${email}> déjà utilisée` }));
   }
 
   async function ensurePhoneIsAvailable({ phone }) {
     const matchingFarmMembersCount = await FarmMember.countDocuments({ phone });
-    if (matchingFarmMembersCount > 0) throw new BadRequestError(JSON.stringify({ phone: `Phone ${phone} already taken` }));
+    if (matchingFarmMembersCount > 0) throw new BadRequestError(JSON.stringify({ phone: `Téléphone <${phone}> déjà utilisé` }));
   }
 
   async function createAccount({ email, password, role }) {
