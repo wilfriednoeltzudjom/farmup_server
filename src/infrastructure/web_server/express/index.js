@@ -11,6 +11,7 @@ const authMiddleware = require('./middlewares/auth.middleware');
 const errorMiddleware = require('./middlewares/error.middleware');
 
 const databaseHelper = require('../../../application/helpers/database.helper');
+const { isValidValue } = require('../../../application/helpers/types.helper');
 const cronJob = require('../../cron_job');
 const logger = require('../../logger');
 const { increaseBandsChickensAgesCronJob } = require('../../../cron_jobs');
@@ -19,7 +20,7 @@ const app = express();
 
 function start(port) {
   app.use(loggingMiddleware);
-  app.use(cors({ credentials: true, origin: [process.env.FRONT_APP_BASE_URL, process.env.FRONT_STORYBOOK_BASE_URL] }));
+  app.use(cors({ credentials: true, origin: [process.env.FRONT_APP_BASE_URL, process.env.FRONT_STORYBOOK_BASE_URL].filter(isValidValue) }));
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
   app.use(cookieParser());
