@@ -12,7 +12,7 @@ module.exports = function buildSupplierFactory({ defaultOptions }) {
   }
 
   async function createSupplier(data = {}, options = {}) {
-    const sale = await new Supplier(generateSupplier(data, options));
+    const sale = new Supplier(generateSupplier(data, options));
 
     return sale.save();
   }

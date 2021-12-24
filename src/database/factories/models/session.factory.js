@@ -8,7 +8,7 @@ module.exports = function buildSessionFactory({ defaultOptions }) {
   }
 
   async function createSession(data = {}, options = {}) {
-    const session = await new Session(generateSession(data, options));
+    const session = new Session(generateSession(data, options));
 
     return session.save();
   }

@@ -2,9 +2,13 @@ const { factory } = require('fakingoose');
 
 const { Customer } = require('../../models');
 
+const factoryOptions = {
+  email: { type: 'email' },
+};
+
 module.exports = function buildCustomerFactory({ defaultOptions }) {
   function generateCustomer(data = {}, options = {}) {
-    return Object.assign(factory(Customer, { ...defaultOptions, ...options }).generate(), data);
+    return Object.assign(factory(Customer, { ...defaultOptions, ...factoryOptions, ...options }).generate(), data);
   }
 
   async function createCustomer(data = {}, options = {}) {

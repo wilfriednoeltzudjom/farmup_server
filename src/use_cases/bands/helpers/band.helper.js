@@ -1,8 +1,8 @@
 const { CHICKENS_MATURITY_AGE } = require('../../../application/helpers/constants');
 const { ResourceNotFoundError } = require('../../../application/helpers/errors');
 const { isNullish, isValidValue } = require('../../../application/helpers/types.helper');
-const { DAY_TAGS } = require('../../../database/enums');
-const { Day, Band } = require('../../../database/models');
+const { DAY_TAGS, BAND_STATUSES } = require('../../../database/enums');
+const { Day, Band, Expense, Sale } = require('../../../database/models');
 const { dateUtils } = require('../../../infrastructure');
 
 async function initializeDays(band) {
@@ -45,7 +45,7 @@ function generateDays(band, daysLeftBeforeMaturity = []) {
   const { startedAt, chickensStartCount, prophylaxis } = band;
 
   return daysLeftBeforeMaturity.map((age, index) => {
-    const day = new Day({ date: dateUtils.add({ date: startedAt, amount: index }), chickensCount: chickensStartCount, chickensAge: age, band });
+    const day = new Day({ date: dateUtils.add({ date: startedAt, amount: index }), chickensCount: chickensStartCount, chickensAge: age, band, farm: band.farm });
     setDayVaccinationTag(day, prophylaxis);
 
     return day;
@@ -73,4 +73,15 @@ async function findBandById(bandId) {
   return band;
 }
 
-module.exports = { initializeDays, findBandById };
+function areBandSubDocumentsNonEditable(band) {
+  return [BAND_STATUSES.PENDING, BAND_STATUSES.CANCELLED, BAND_STATUSES.ENDED].includes(band.status);
+}
+
+async function getBandAmountsAnalytics(band) {
+  const [{ totalExpenses = 0 } = {}] = await Expense.aggregate([{ $match: { band: band._id } }, { $group: { _id: null, totalExpenses: { $sum: '$totalPrice' } } }]);
+  const [{ totalSales = 0 } = {}] = await Sale.aggregate([{ $match: { band: band._id } }, { $group: { _id: null, totalSales: { $sum: '$totalPrice' } } }]);
+
+  return { totalExpenses, totalSales, turnover: totalSales - totalExpenses };
+}
+
+module.exports = { initializeDays, findBandById, areBandSubDocumentsNonEditable, getBandAmountsAnalytics };

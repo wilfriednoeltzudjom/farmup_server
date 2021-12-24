@@ -9,7 +9,7 @@ describe('UseCase - Days - Add day death', () => {
   const { dateUtils } = dependencies;
 
   beforeEach(function () {
-    this.bandData = { chickensDeathsCount: 0 };
+    this.bandData = { chickensDeathsCount: 0, chickensSalesCount: 21, chickensStartCount: 150 };
     this.dayData = { chickensCount: 100 };
     this.dayDeathData = DayDeathFactory.generateDayDeath({ date: dateUtils.now(), count: 2 });
   });
@@ -23,6 +23,15 @@ describe('UseCase - Days - Add day death', () => {
     const day = await DayFactory.createDay({ date: dateUtils.substract({ amount: 1 }), band, ...this.dayData }, { deaths: { skip: true } });
 
     await expect(addDayDeathUseCase.execute({ dayId: day.id, ...this.dayDeathData })).to.be.eventually.rejectedWith(BadRequestError);
+  });
+
+  it('should fail if the remaining chickens count is less than the provided count', async function () {
+    const date = dateUtils.now();
+    const band = await BandFactory.createBand(this.bandData);
+    const day = await DayFactory.createDay({ date, band }, { deaths: { skip: true } });
+    const deathData = { date, count: 130 };
+
+    await expect(addDayDeathUseCase.execute({ dayId: day.id, ...deathData })).to.be.eventually.rejectedWith(BadRequestError, /nombre de pertes incorrect/i);
   });
 
   it('should succeed and properly save a death entry', async function () {

@@ -8,7 +8,7 @@ module.exports = function buildDayFactory({ defaultOptions }) {
   }
 
   async function createDay(data = {}, options = {}) {
-    const day = await new Day(generateDay(data, options));
+    const day = new Day(generateDay(data, options));
 
     return day.save();
   }

@@ -34,7 +34,7 @@ module.exports = function buildCreateSupplierUseCase(dependencies) {
     if (suppliers.length > 0) {
       nextSupplierPosition = Number(suppliers[0].code.slice(2));
     }
-    supplier.code = 'FO'.concat(String(nextSupplierPosition + 1).padStart(5, '0'));
+    supplier.code = 'SU'.concat(String(nextSupplierPosition + 1).padStart(5, '0'));
   }
 
   return { execute };

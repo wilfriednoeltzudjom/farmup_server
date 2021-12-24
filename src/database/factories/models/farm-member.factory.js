@@ -8,7 +8,7 @@ module.exports = function buildFarmMemberFactory({ defaultOptions }) {
   }
 
   async function createFarmMember(data = {}, options = {}) {
-    const farmMember = await new FarmMember(generateFarmMember(data, options));
+    const farmMember = new FarmMember(generateFarmMember(data, options));
 
     return farmMember.save();
   }

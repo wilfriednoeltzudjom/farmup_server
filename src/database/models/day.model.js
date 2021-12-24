@@ -24,6 +24,7 @@ const daySchema = new Schema(
     observations: { type: [{ type: dayObservationSchema }], default: [] },
     prophylaxisRecord: { type: prophylaxisRecordSchema },
     band: { type: Schema.Types.ObjectId, ref: 'Band' },
+    farm: { type: Schema.Types.ObjectId, ref: 'Farm' },
   },
   { timestamps: true, toJSON: { virtuals: true } }
 );

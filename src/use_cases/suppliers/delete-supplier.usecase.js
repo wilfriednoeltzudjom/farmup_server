@@ -3,7 +3,7 @@ const { supplierMessages } = require('../../application/messages');
 const { Supplier, Expense } = require('../../database/models');
 const { findSupplierById } = require('./helpers/supplier.helper');
 
-module.exports = function buildGetSupplier() {
+module.exports = function buildDeleteSupplier() {
   async function execute({ supplierId } = {}) {
     const supplier = await findSupplierById(supplierId);
     await ensureThereIsNoExpensesRelatedToSupplier(supplier);

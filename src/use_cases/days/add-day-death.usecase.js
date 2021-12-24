@@ -1,3 +1,5 @@
+const { BadRequestError } = require('../../application/helpers/errors');
+const { INVALID_DEATHS_COUNT } = require('../../application/messages/day.messages');
 const { findBandById } = require('../bands/helpers/band.helper');
 const { findDayById, ensureObjectDateIsSameAsDay, getDaysAfterDay } = require('./helpers/day.helper');
 
@@ -9,6 +11,7 @@ module.exports = function buildAddDayDeath(dependencies) {
 
     const day = await findDayById(dayId);
     ensureObjectDateIsSameAsDay(data, day);
+    await ensureDeathCanBeSaved(day, data);
     day.deaths.push(data);
     await applyDayUpdates(day, data);
     await updateDaysAfterChickensCount(day, data);
@@ -21,6 +24,14 @@ module.exports = function buildAddDayDeath(dependencies) {
     dataValidator.validateNumberAsRequired(count, 'Death count');
     dataValidator.validateDateAsRequired(date, 'Death date');
     dataValidator.validateString(comment, 'Death comment');
+  }
+
+  async function ensureDeathCanBeSaved(day, { count }) {
+    const band = await findBandById(day.band);
+    const remainingChickensCount = band.chickensStartCount - band.chickensSalesCount - band.chickensDeathsCount;
+    if (count > remainingChickensCount) {
+      throw new BadRequestError(INVALID_DEATHS_COUNT({ remainingChickensCount }).FR);
+    }
   }
 
   async function applyDayUpdates(day, { count }) {

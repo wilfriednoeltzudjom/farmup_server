@@ -10,7 +10,7 @@ module.exports = function buildAccountFactory({ defaultOptions, hashUtils }) {
   async function createAccount(data = {}, options = {}) {
     const accountData = generateAccount(data, options);
     const encryptedPassword = await hashUtils.createHash(accountData.password);
-    const account = await new Account({ ...accountData, password: encryptedPassword });
+    const account = new Account({ ...accountData, password: encryptedPassword });
 
     return account.save();
   }

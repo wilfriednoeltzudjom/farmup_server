@@ -41,7 +41,7 @@ describe('UseCase - Suppliers - Create supplier', () => {
 
     it('should succeed an create a new supplier', async function () {
       const supplier = await expect(createSupplierUseCase.execute({ farmId: this.farm.id, ...SupplierFactory.generateSupplier(this.supplierData, { code: { skip: true } }) })).to.be.fulfilled;
-      expect(supplier.code).to.eql('FO00001');
+      expect(supplier.code).to.eql('SU00001');
     });
   });
 

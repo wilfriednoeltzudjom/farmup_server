@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 const { filterSearchableStrings } = require('../../application/helpers/models.helper');
+const { capitalize, toUpperCase, toLowerCase } = require('../../application/helpers/text.helper');
+const { isValidValue } = require('../../application/helpers/types.helper');
 const { idGenerator, diacriticsUtils } = require('../../infrastructure');
 const { CUSTOMER_TYPES } = require('../enums');
 const { addressSchema } = require('../schemas');
@@ -10,11 +12,12 @@ const { Schema } = mongoose;
 const customerSchema = new Schema(
   {
     uuid: { type: String, default: idGenerator.generateUUID },
+    code: { type: String, required: true },
     type: { type: String, enum: Object.values(CUSTOMER_TYPES), required: true },
-    name: { type: String },
-    lastName: { type: String },
-    firstName: { type: String },
-    email: { type: String },
+    name: { type: String, required: isNameRequired, set: toUpperCase },
+    lastName: { type: String, required: isLastNameRequired, set: capitalize },
+    firstName: { type: String, capitalize },
+    email: { type: String, set: toLowerCase },
     phone: { type: String },
     addressText: { type: String },
     address: { type: addressSchema },
@@ -34,5 +37,16 @@ customerSchema.pre('save', function () {
 customerSchema.methods.refresh = function () {
   return this.model('Customer').findById(this.id);
 };
+customerSchema.virtual('fullName').get(function () {
+  return [this.lastName, this.firstName].filter(isValidValue).join(' ').trim();
+});
+
+function isNameRequired() {
+  return this.type === CUSTOMER_TYPES.COMPANY;
+}
+
+function isLastNameRequired() {
+  return this.type === CUSTOMER_TYPES.INDIVIDUAL;
+}
 
 module.exports = mongoose.models.Customer || mongoose.model('Customer', customerSchema);

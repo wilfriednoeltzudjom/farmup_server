@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+const { roundNumberToTwoDecimal } = require('../../application/helpers/math.helper');
 const { filterSearchableStrings } = require('../../application/helpers/models.helper');
 const { idGenerator, diacriticsUtils } = require('../../infrastructure');
 const { prophylaxisSchema } = require('./prophylaxis.model');
@@ -20,6 +21,7 @@ const bandSchema = new Schema(
     mainBuildingArea: { type: Number, default: 0 },
     chickensStartCount: { type: Number, default: 0 },
     chickensDeathsCount: { type: Number, default: 0 },
+    chickensSalesCount: { type: Number, default: 0 },
     chickensStartAge: { type: Number, default: 0 },
     chickensCurrentAge: { type: Number, default: 0 },
     chickensDeathRate: { type: Number, default: 0 },
@@ -32,6 +34,7 @@ const bandSchema = new Schema(
 );
 bandSchema.pre('save', function () {
   this.searchableStrings = filterSearchableStrings([diacriticsUtils.sanitize(this.code), diacriticsUtils.sanitize(this.title)]);
+  this.chickensDeathRate = this.chickensStartCount > 0 ? roundNumberToTwoDecimal((this.chickensDeathsCount / this.chickensStartCount) * 100) : 0;
 });
 bandSchema.methods.refresh = function () {
   return this.model('Band').findById(this.id);

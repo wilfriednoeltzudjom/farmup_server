@@ -50,6 +50,7 @@ module.exports = function buildIncreaseBandsChickensAges() {
           chickensAge: age,
           chickensCount: lastDay.chickensCount,
           band,
+          farm: band.farm,
         });
 
         return day.save();

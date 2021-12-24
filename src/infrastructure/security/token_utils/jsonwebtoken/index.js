@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const TokenUtils = require('../interface');
-const { SessionExpiredError } = require('../../../../application/helpers/errors');
+const { SessionExpiredError, UnauthorizedError } = require('../../../../application/helpers/errors');
 
 const defaultOptions = {
   issuer: 'hlg',

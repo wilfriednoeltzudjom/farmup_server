@@ -8,7 +8,7 @@ module.exports = function buildProphylaxisFactory({ defaultOptions }) {
   }
 
   async function createProphylaxis(data = {}, options = {}) {
-    const farm = await new Prophylaxis(generateProphylaxis(data, options));
+    const farm = new Prophylaxis(generateProphylaxis(data, options));
 
     return farm.save();
   }

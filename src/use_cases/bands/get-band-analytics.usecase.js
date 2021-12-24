@@ -1,6 +1,6 @@
 const { BAND_STATUSES } = require('../../database/enums');
-const { Sale, Expense } = require('../../database/models');
-const { findBandById } = require('./helpers/band.helper');
+const { Sale } = require('../../database/models');
+const { findBandById, getBandAmountsAnalytics } = require('./helpers/band.helper');
 
 module.exports = function getBandAnalytics() {
   async function execute({ bandId } = {}) {
@@ -8,7 +8,7 @@ module.exports = function getBandAnalytics() {
     const dates = await getDatesAnalytics(band);
     const counts = getCountsAnalytics(band);
     const ages = getAgesAnalytics(band);
-    const amounts = await getAmountsAnalytics(band);
+    const amounts = await getBandAmountsAnalytics(band);
 
     return { dates, counts, ages, amounts };
   }
@@ -28,22 +28,15 @@ module.exports = function getBandAnalytics() {
   }
 
   function getCountsAnalytics(band) {
-    const { chickensStartCount, chickensDeathsCount, chickensDeathRate } = band;
+    const { chickensStartCount, chickensSalesCount, chickensDeathsCount, chickensDeathRate } = band;
 
-    return { total: chickensStartCount, deaths: chickensDeathsCount, deathRate: chickensDeathRate };
+    return { total: chickensStartCount, sales: chickensSalesCount, deaths: chickensDeathsCount, deathRate: chickensDeathRate };
   }
 
   function getAgesAnalytics(band) {
     const { chickensStartAge, chickensCurrentAge } = band;
 
     return { start: chickensStartAge, current: chickensCurrentAge };
-  }
-
-  async function getAmountsAnalytics(band) {
-    const [{ totalExpenses = 0 } = {}] = await Expense.aggregate([{ $match: { band: band._id } }, { $group: { _id: null, totalExpenses: { $sum: '$totalPrice' } } }]);
-    const [{ totalSales = 0 } = {}] = await Sale.aggregate([{ $match: { band: band._id } }, { $group: { _id: null, totalSales: { $sum: '$totalPrice' } } }]);
-
-    return { totalExpenses, totalSales, turnover: totalSales - totalExpenses };
   }
 
   return { execute };

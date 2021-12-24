@@ -19,6 +19,7 @@ const buildCustomerFactory = require('./models/customer.factory');
 const buildDayAlimentationFactory = require('./schemas/day-alimentation.factory');
 const buildDayMedecineFactory = require('./schemas/day-medecine.factory');
 const buildDayDeathFactory = require('./schemas/day-death.factory');
+const buildAssetFactory = require('./schemas/asset.factory');
 
 const defaultOptions = {
   _id: { skip: true },
@@ -38,12 +39,13 @@ module.exports = {
   SettingsFactory: buildSettingsFactory({ defaultOptions }),
   ProphylaxisFactory: buildProphylaxisFactory({ defaultOptions }),
   BandFactory: buildBandFactory({ defaultOptions }),
-  ExpenseFactory: buildExpenseFactory({ defaultOptions }),
-  SaleFactory: buildSaleFactory({ defaultOptions }),
+  ExpenseFactory: buildExpenseFactory({ defaultOptions, ...dependencies }),
+  SaleFactory: buildSaleFactory({ defaultOptions, ...dependencies }),
   DayFactory: buildDayFactory({ defaultOptions }),
   SupplierFactory: buildSupplierFactory({ defaultOptions }),
   CustomerFactory: buildCustomerFactory({ defaultOptions }),
   DayAlimentationFactory: buildDayAlimentationFactory({ defaultOptions }),
   DayMedecineFactory: buildDayMedecineFactory({ defaultOptions }),
   DayDeathFactory: buildDayDeathFactory({ defaultOptions }),
+  AssetFactory: buildAssetFactory({ defaultOptions }),
 };

@@ -8,7 +8,7 @@ module.exports = function buildFarmFactory({ defaultOptions }) {
   }
 
   async function createFarm(data = {}, options = {}) {
-    const farm = await new Farm(generateFarm(data, options));
+    const farm = new Farm(generateFarm(data, options));
 
     return farm.save();
   }

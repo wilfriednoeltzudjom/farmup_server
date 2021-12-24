@@ -11,4 +11,10 @@ module.exports = {
     EN: 'Your entry has been successfully deleted.',
     FR: "L'entrée a bien été supprimée.",
   },
+  INVALID_DEATHS_COUNT({ remainingChickensCount }) {
+    return {
+      EN: `Invalid lost count. Your remaining chickens count is <b>${remainingChickensCount}</b>.`,
+      FR: `Nombre de pertes incorrect. Votre nombre de sujets restants est de <b>${remainingChickensCount}</b>.`,
+    };
+  },
 };

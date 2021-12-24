@@ -23,4 +23,18 @@ module.exports = {
       FR: `La bande <b>${code}</b> a bien été supprimée.`,
     };
   },
+  BAND_ENDED({ code }) {
+    return {
+      EN: `Band <b>${code}</b> successfully marked as ended.`,
+      FR: `La bande <b>${code}</b> a bien été terminée.`,
+    };
+  },
+  BAND_NON_FINISHABLE: {
+    EN: 'You need to empty your chickens stock before doing this action.',
+    FR: 'Vous devez vider votre stock de sujets pour effectuer cette action.',
+  },
+  BAND_NON_EDITABLE: {
+    EN: 'You can no longer edit this band.',
+    FR: 'Cette bande ne peut pas être mise à jour.',
+  },
 };

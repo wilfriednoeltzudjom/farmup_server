@@ -11,6 +11,7 @@ const factoryOptions = {
   chickensCurrentAge: { skip: true },
   chickensStartCount: { skip: true },
   chickensDeathsCount: { skip: true },
+  chickensSalesCount: { skip: true },
   chickensDeathRate: { skip: true },
 };
 

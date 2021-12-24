@@ -8,7 +8,7 @@ module.exports = function buildSettingsFactory({ defaultOptions }) {
   }
 
   async function createSettings(data = {}, options = {}) {
-    const settings = await new Settings(generateSettings(data, options));
+    const settings = new Settings(generateSettings(data, options));
 
     return settings.save();
   }

@@ -3,7 +3,7 @@ const HttpRespone = require('../../../../application/payloads/http-response');
 const errorParser = require('../../../error_parser');
 const logger = require('../../../logger');
 
-module.exports = function (err, _, res, _) {
+module.exports = function (err, _, res, __) {
   const message = err.message;
   const response = {};
   if (isJSONString(message)) response.data = JSON.parse(message);
