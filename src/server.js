@@ -4,8 +4,8 @@ const envHelper = require('./application/helpers/env.helper');
 const databaseHelper = require('./application/helpers/database.helper');
 
 function initEnvironmentVariables() {
+  envHelper.loadEnvFile('default');
   if (process.env.NODE_ENV !== 'production') {
-    envHelper.loadEnvFile('default');
     envHelper.loadEnvFile(process.env.NODE_ENV);
   }
 }
