@@ -2,6 +2,7 @@ const { expect } = require('chai');
 
 const dependencies = require('../../../src/infrastructure');
 const createBandUseCase = require('../../../src/use_cases/bands/create-band.usecase')(dependencies);
+const getDaysUseCase = require('../../../src/use_cases/days/get-days.usecase')(dependencies);
 const { ProphylaxisFactory, FarmFactory } = require('../../../src/database/factories');
 const { BadRequestError, ResourceNotFoundError } = require('../../../src/application/helpers/errors');
 const { BAND_STATUSES } = require('../../../src/database/enums');
@@ -53,9 +54,13 @@ describe('UseCase - Bands - Create band', () => {
   });
 
   it('should create a new band and create additional days if the 45th had already been reached', async function () {
-    this.bandFormData.startedAt = dateUtils.substract({ amount: 45 - this.bandFormData.chickensStartAge + 10 });
+    this.bandFormData.startedAt = dateUtils.substract({ amount: 45 - this.bandFormData.chickensStartAge + 20 });
 
     const band = await expect(createBandUseCase.execute({ farmId: this.farm.id, ...this.bandFormData })).to.be.fulfilled;
-    expect(band.chickensCurrentAge).to.eql(55);
+    expect(band.chickensCurrentAge).to.eql(65);
+
+    const days = await expect(getDaysUseCase.execute({ bandId: band.id })).to.be.fulfilled;
+    expect(days).to.have.lengthOf(65 - band.chickensStartAge + 1);
+    expect(dateUtils.isEqual({ comparedDate: days[days.length - 1].date, date: dateUtils.add({ date: days[0].date, amount: days.length - 1 }) })).to.eql(true);
   });
 });

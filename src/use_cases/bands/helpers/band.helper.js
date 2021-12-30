@@ -11,8 +11,7 @@ async function initializeDays(band) {
   const days = [];
   const daysLeftBeforeMaturity = getDaysLeftBeforeMaturity(band);
   const additionalDaysAfterMaturity = getAdditionalDaysAfterMaturity(band);
-  days.push(...generateDays(band, daysLeftBeforeMaturity));
-  days.push(...generateDays(band, additionalDaysAfterMaturity));
+  days.push(...generateDays(band, [...daysLeftBeforeMaturity, ...additionalDaysAfterMaturity]));
 
   return saveDays(days);
 }
