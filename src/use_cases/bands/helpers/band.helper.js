@@ -8,42 +8,27 @@ const { dateUtils } = require('../../../infrastructure');
 async function initializeDays(band) {
   if (isNullish(band.startedAt)) return;
 
-  const days = [];
-  const daysLeftBeforeMaturity = getDaysLeftBeforeMaturity(band);
-  const additionalDaysAfterMaturity = getAdditionalDaysAfterMaturity(band);
-  days.push(...generateDays(band, [...daysLeftBeforeMaturity, ...additionalDaysAfterMaturity]));
+  const ages = generateAges(band);
+  const days = generateDays(band, ages);
 
   return saveDays(days);
 }
 
-function getDaysLeftBeforeMaturity({ chickensStartAge }) {
-  const days = [];
-  let ageCounter = chickensStartAge;
-  while (ageCounter <= CHICKENS_MATURITY_AGE) {
-    days.push(ageCounter);
-    ageCounter++;
+function generateAges({ chickensStartAge, chickensCurrentAge }) {
+  const ages = [];
+  let ageCounterStart = chickensStartAge;
+  let ageCounterStop = chickensCurrentAge > CHICKENS_MATURITY_AGE ? chickensCurrentAge : CHICKENS_MATURITY_AGE;
+  for (let ageCounter = ageCounterStart; ageCounter <= ageCounterStop; ageCounter++) {
+    ages.push(ageCounter);
   }
 
-  return days;
+  return ages;
 }
 
-function getAdditionalDaysAfterMaturity({ chickensCurrentAge }) {
-  if (chickensCurrentAge <= CHICKENS_MATURITY_AGE) return [];
-
-  const days = [];
-  let ageCounter = CHICKENS_MATURITY_AGE + 1;
-  while (ageCounter <= chickensCurrentAge) {
-    days.push(ageCounter);
-    ageCounter++;
-  }
-
-  return days;
-}
-
-function generateDays(band, daysLeftBeforeMaturity = []) {
+function generateDays(band, ages = []) {
   const { startedAt, chickensStartCount, prophylaxis } = band;
 
-  return daysLeftBeforeMaturity.map((age, index) => {
+  return ages.map((age, index) => {
     const day = new Day({ date: dateUtils.add({ date: startedAt, amount: index }), chickensCount: chickensStartCount, chickensAge: age, band, farm: band.farm });
     setDayVaccinationTag(day, prophylaxis);
 

@@ -42,4 +42,8 @@ module.exports = class MomentDateUtils extends DateUtils {
   resetDate() {
     mockdate.reset();
   }
+
+  formatDate({ date = moment(), format = 'YYYY-MM-DD' } = {}) {
+    return moment(date).format(format);
+  }
 };

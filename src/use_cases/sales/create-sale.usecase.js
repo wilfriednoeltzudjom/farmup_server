@@ -1,6 +1,6 @@
 const { BadRequestError } = require('../../application/helpers/errors');
 const { INVALID_SALE_QUANTITY } = require('../../application/messages/sale.messages');
-const { Sale } = require('../../database/models');
+const { Sale, Day } = require('../../database/models');
 const { findBandById } = require('../bands/helpers/band.helper');
 const { formatSaleData, findSaleById } = require('./helpers/sale.helper');
 
@@ -17,6 +17,7 @@ module.exports = function buildCreateSaleUseCase(dependencies) {
     await setSaleCode(sale, band);
     await sale.save();
     await updateBandChickensSalesCount(band, sale);
+    await updateDaysRemainingChickensCount(band, sale);
 
     return findSaleById(sale.id);
   }
@@ -48,6 +49,15 @@ module.exports = function buildCreateSaleUseCase(dependencies) {
   async function updateBandChickensSalesCount(band, sale) {
     band.chickensSalesCount = band.chickensSalesCount + sale.quantity;
     await band.save();
+  }
+
+  async function updateDaysRemainingChickensCount(band, sale) {
+    const days = await Day.find({ band, date: { $gte: sale.date } });
+    await Promise.all(
+      days.map((day) => {
+        return Day.updateOne({ _id: day.id }, { $inc: { chickensCount: -sale.quantity } });
+      })
+    );
   }
 
   return { execute };

@@ -17,7 +17,7 @@ module.exports = function buildDeleteBand() {
   }
 
   function ensureBandIsDeletable(band) {
-    if (band.status !== BAND_STATUSES.PENDING) throw new BadRequestError(`You can only delete a pending band. Your band status is ${band.status}`);
+    if (![BAND_STATUSES.PENDING, BAND_STATUSES.CANCELLED].includes(band.status)) throw new BadRequestError(`You can only delete a pending or a cancelled band. Your band status is ${band.status}`);
   }
 
   function deleteAllDays(band) {

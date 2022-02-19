@@ -63,4 +63,15 @@ describe('UseCase - Bands - Create band', () => {
     expect(days).to.have.lengthOf(65 - band.chickensStartAge + 1);
     expect(dateUtils.isEqual({ comparedDate: days[days.length - 1].date, date: dateUtils.add({ date: days[0].date, amount: days.length - 1 }) })).to.eql(true);
   });
+
+  it('should create a new band and stop at the current date if the 45th day has already been reached', async function () {
+    this.bandFormData.startedAt = dateUtils.substract({ amount: 30 });
+    this.bandFormData.chickensStartAge = 180;
+
+    const band = await expect(createBandUseCase.execute({ farmId: this.farm.id, ...this.bandFormData })).to.be.fulfilled;
+    expect(band.chickensCurrentAge).to.eql(210);
+
+    const days = await getDaysUseCase.execute({ bandId: band.id });
+    expect(days).to.have.lengthOf(210 - band.chickensStartAge + 1);
+  });
 });

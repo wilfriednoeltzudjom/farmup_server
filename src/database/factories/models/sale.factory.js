@@ -8,10 +8,10 @@ const factoryOptions = {
 
 module.exports = function buildSaleFactory({ defaultOptions, dateUtils }) {
   function generateSale(data = {}, options = {}) {
-    const sale = Object.assign(factory(Sale, { ...defaultOptions, ...factoryOptions, ...options }).generate(), data);
+    const sale = factory(Sale, { ...defaultOptions, ...factoryOptions, ...options }).generate();
     if (sale.date) sale.date = dateUtils.now();
 
-    return sale;
+    return Object.assign(sale, data);
   }
 
   async function createSale(data = {}, options = {}) {
